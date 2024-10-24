@@ -1,0 +1,105 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+import time
+from selenium.webdriver import Keys
+import pyperclip
+import pandas as pd
+from selenium.common.exceptions import NoSuchElementException
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_experimental_option('detach',True)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=chrome_options)
+driver.maximize_window()
+driver.get('http://naver.com')
+time.sleep(3)
+driver.find_element(By.CLASS_NAME,'MyView-module__link_login___HpHMW').click()
+time.sleep(5)
+naverid = ''
+naverpw = ''
+search = '편의점 우산'
+driver.find_element(By.ID,'id').click()
+pyperclip.copy(naverid)
+driver.find_element(By.ID,'id').send_keys(Keys.CONTROL,'v')
+time.sleep(3)
+driver.find_element(By.ID,'pw').click()
+pyperclip.copy(naverpw)
+driver.find_element(By.ID,'pw').send_keys(Keys.CONTROL,'v')
+time.sleep(2)
+driver.find_element(By.CLASS_NAME, 'btn_login').click()
+time.sleep(4)
+#https://m.cafe.naver.com/imsanbu
+#https://m.cafe.naver.com/joonggonara.cafe?iframe_url=/ArticleList.nhn%3Fsearch.clubid=10050146%26search.boardtype=L%26viewType=pc
+driver.get('https://m.cafe.naver.com/imsanbu')
+time.sleep(2)
+# 검색어 입력 및 검색 실행
+driver.find_element(By.CLASS_NAME, 'gnb_search').click()
+time.sleep(0.5)
+pyperclip.copy(search)
+driver.find_element(By.XPATH, '//*[@id="ct"]/div/div/div[1]/div[1]/div/input').click()
+driver.find_element(By.XPATH, '//*[@id="ct"]/div/div/div[1]/div[1]/div/input').send_keys(Keys.CONTROL, 'v')
+driver.find_element(By.XPATH, '//*[@id="ct"]/div/div/div[1]/div[1]/div/input').send_keys(Keys.ENTER)
+time.sleep(2)
+# 최신순 -> 관련도순
+# driver.find_element(By.ID, 'searchOptionSortByDiv').click()
+# time.sleep(1)
+# driver.find_element(By.XPATH, '//*[@id="searchOptionSortByDiv"]/ul/li[2]/a').click()
+# time.sleep(1)
+# //*[@id="ct"]/div/div/div[2]/div[4]/div/div[2]/ul/div[1]/a/div/strong/em
+for temp in range(1,35):
+    driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_DOWN)
+    time.sleep(0.5)
+time.sleep(2)
+for temp in range(1,35):
+    driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_UP)
+    time.sleep(0.5)
+# 새로운 게시글 클릭하여 정보 수집하기
+title_list = []
+content_list = []
+comment_list = []
+for num in range(1,100):
+    # XPATH에서 숫자 부분을 각각 num으로 대체하여 클릭
+    xpath = f'/html/body/div[3]/div/div/div/div[2]/div[5]/div/div[2]/ul/div[{num}]/a/div[1]'
+    print(xpath)
+    driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_DOWN)
+    time.sleep(0.5)
+    driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_UP)
+    time.sleep(0.5)
+    try:
+        driver.find_element(By.XPATH, xpath).click()
+        time.sleep(2)
+    except NoSuchElementException as e:
+        print(f"클릭에 실패했습니다: {e}")
+        continue
+    try:
+        title = driver.find_element(By.XPATH, '//*[@id="ct"]/div[1]/div[2]/h2')
+        title_list.append(title.text)
+    except NoSuchElementException as e:
+        print(f"제목을 찾을 수 없습니다: {e}")
+        title_list.append(None)
+    try:
+        content = driver.find_element(By.XPATH, '//*[@id="postContent"]')
+        content_list.append(content.text)
+    except NoSuchElementException as e:
+        print(f"내용을 찾을 수 없습니다: {e}")
+        content_list.append(None)
+    try:
+        comment = driver.find_element(By.CLASS_NAME, 'CommonComment.talk_comment_wrap.ArticleComment')
+        comment_text = comment.text.strip()
+        comment_list.append(comment_text)
+    except NoSuchElementException as e:
+        print(f"댓글을 찾을 수 없습니다: {e}")
+        comment_list.append(None)
+    print(comment_text)
+    # 뒤로 가기
+    driver.back()
+    time.sleep(2)
+data = {
+    'Title': title_list,
+    'Content': content_list,
+    'Comment': comment_list
+}
+df = pd.DataFrame(data)
+# CSV 파일로 저장
+df.to_csv('mom_cafe_p.csv', index=False)
