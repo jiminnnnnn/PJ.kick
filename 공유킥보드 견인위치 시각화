@@ -1,0 +1,23 @@
+# @title 기본 제목 텍스트
+import folium
+from geopy.distance import geodesic
+import pandas as pd
+# 학교와 견인 위치 데이터 불러오기
+school_data = pd.read_csv('초중고학교위치.csv',encoding='cp949')
+towing_data = pd.read_csv('강남.csv')
+seoul_school = school_data[school_data['소재지지번주소'].str.contains('서울')]
+towing_data[['위도', '경도']] = towing_data['위도경도'].str.extract(r"'lat': '([^']+)', 'lng': '([^']+)'")
+towing_data=towing_data.dropna()
+# 지도 생성
+map = folium.Map(location=[37.55, 126.98], zoom_start=11)
+for idx, school in seoul_school.iterrows():
+    for idx, towing in towing_data.iterrows():
+        school_loc = (school['위도'], school['경도'])
+        towing_loc = (towing['위도'], towing['경도'])
+        distance = geodesic(school_loc, towing_loc).kilometers
+        if distance <= 0.4:
+            folium.CircleMarker(location=[towing['위도'], towing['경도']], radius=2.5, color='red', fill=True, fill_color='red',fill_opacity=1).add_to(map)
+# 지도 저장
+map.save('견인위치_강남.html')
+# 지도 표시
+map
