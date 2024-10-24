@@ -1,0 +1,76 @@
+!sudo apt-get install -y fonts-nanum
+!sudo fc-cache -fv
+!rm ~/.cache/matplotlib -rf
+
+plt.rc('font',family='NanumBarunGothic')
+!pip install konlpy
+!pip install koreanize-matplotlib
+!pip install apyori
+!pip install wordcloud pillow
+
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+from PIL import Image
+import numpy as np
+from collections import Counter
+from konlpy.tag import Okt
+import matplotlib.font_manager as fm
+import pandas as pd
+import re
+from tqdm import tqdm
+from wordcloud import STOPWORDS
+
+
+df = pd.read_csv('kick_news_link.csv')
+df
+
+total_list = []
+okt = Okt()
+
+for temp in tqdm(df['제목']):
+    fdata = okt.nouns(temp)
+    for temp1 in fdata:
+        total_list.append(temp1)
+
+total_list
+
+freq_data = dict(Counter(total_list))
+sorted_freq = sorted(freq_data.items(),key = lambda item: item[1],reverse=True)
+sorted_freq
+df_sorted_freq = pd.DataFrame(sorted_freq, columns=['단어', '빈도수'])
+
+
+# 나눔 폰트 경로 설정
+font_path = '/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf'
+fontprop = fm.FontProperties(fname=font_path)
+
+# CSV 파일에서 한글 텍스트 추출
+korean_text = ' '.join(df_sorted_freq['단어'].dropna().str.findall(r'[가-힣]+').sum())
+
+
+# 원치 않는 단어 설정
+unwanted_words = set(STOPWORDS)
+unwanted_words.update(['킥','보드','전동','킥보드','전동킥보드','전동 킥보드','개인형 이동장치','개인','이동','장치','회','위','등','또','세','칙','대통령실','더','왜'])  # 제외할 단어 추가
+
+mask_image = np.array(Image.open('warn2.png').convert("RGB"))
+wordcloud = WordCloud(mask=mask_image, width=1700, height=1700, background_color='black', font_path=font_path, stopwords=unwanted_words, max_font_size=50, colormap='copper', min_font_size=10, random_state=286).generate(korean_text)
+
+# 특정 단어 색상 변경 함수
+def red_color(word, font_size, position, orientation, random_state=None, **kwargs):
+    if word in['광주','음주운전','대학생' ,'벌금형','제한']:
+        return "rgb(255, 50, 50)"  # '광주' 단어의 색상을 빨간색으로 변경
+    if word in ['운영','방치','모빌리티','견인','광주시','경찰서','시민','국민']:
+        return "rgb(100,100,100)"
+    if word in ['축제','배민','즉시','도로','청주시','자전거']:
+      return "rgb(50,50,50)"  
+    else:
+        return "rgb(200, 200, 200)"  # 그 외의 단어는 검은색으로 유지
+
+# 워드클라우드에 색상 변경 적용
+wordcloud_recolored = wordcloud.recolor(color_func=red_color)
+
+# 그래픽 출력
+plt.figure(figsize=(10, 8))
+plt.imshow(wordcloud_recolored, interpolation='bilinear')
+plt.axis('off')
+plt.show()
