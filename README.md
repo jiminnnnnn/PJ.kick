@@ -16,7 +16,7 @@ Here are some ideas to get you started:
 -->
 
 
-## 👋 GS25 공유우산 
+## 👋 교육공모전 킥보드
 데이터 분석을 통해 GS25에게 공유우산 사업을 제안하는 프로젝트
 
 ## 🌱 프로젝트 정보
