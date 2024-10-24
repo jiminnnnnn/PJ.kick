@@ -1,0 +1,51 @@
+import folium
+import requests
+import json
+import pandas as pd
+
+# 여러 CSV 파일의 파일 경로 리스트
+file_paths = ['노원구1.csv', '도봉구1.csv','동대문구1.csv','동작구1.csv','마포구1.csv','서대문구1.csv','서초구1.csv','성동구1.csv',]
+
+# 빈 데이터프레임 생성
+combined_df = pd.DataFrame()
+
+# 각 파일을 순회하면서 데이터프레임 합치기
+for file_path in file_paths:
+    df = pd.read_csv(file_path)
+    combined_df = pd.concat([combined_df, df], ignore_index=True)
+
+# 서울 행정구역 json raw파일(githubcontent)
+r = requests.get('https://raw.githubusercontent.com/southkorea/seoul-maps/master/kostat/2013/json/seoul_municipalities_geo_simple.json')
+seoul_geo = r.json()
+
+# 지도의 중심 위치 설정 (예: 서울)
+map_center = [37.654969, 127.059368]  # 위도(latitude), 경도(longitude)
+
+# folium Map 객체 생성
+mymap = folium.Map(location=map_center, zoom_start=12, tiles='CartoDB Positron')
+
+# 서울 행정구역을 지도에 추가
+folium.GeoJson(
+    seoul_geo,
+    name='지역구'
+).add_to(mymap)
+
+# 데이터프레임에서 위도와 경도를 가져와서 점 찍기
+for index, row in combined_df.iterrows():
+    latitude = row['위도']
+    longitude = row['경도']
+    name = row['사고내용']  # 마커 클릭 시 표시할 이름
+
+    # CircleMarker를 사용하여 점 생성
+    folium.CircleMarker(
+        location=[latitude, longitude],
+        radius=5,  # 점의 크기 조절
+        color='red',  # 점의 색상 지정
+        fill=True,
+        fill_color='red',  # 점 내부의 색상 지정
+        fill_opacity=0.7,  # 점 내부의 투명도 설정
+        popup=name
+    ).add_to(mymap)
+
+# 결과 지도 출력
+mymap.save("map_with_folium.html")  # HTML 파일로 저장
