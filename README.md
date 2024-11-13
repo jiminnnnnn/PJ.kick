@@ -19,7 +19,7 @@ Here are some ideas to get you started:
 ## 👋 교육공모전 킥보드
 데이터 분석을 통해 GS25에게 공유우산 사업을 제안하는 프로젝트
 
-![image](https://github.com/user-attachments/assets/ede06293-2f87-4e69-b7f2-c3ec8f6bd18d)(<https://drive.google.com/file/d/1BLzctTVUykx3_Yatg5lnoh09Vj80Ibpo/view?usp=sharing>)
+[![image](https://github.com/user-attachments/assets/ede06293-2f87-4e69-b7f2-c3ec8f6bd18d)](<https://drive.google.com/file/d/1BLzctTVUykx3_Yatg5lnoh09Vj80Ibpo/view?usp=sharing>)
 
 ## 🌱 프로젝트 정보
 ### 1.제작기간
