@@ -32,14 +32,13 @@ Here are some ideas to get you started:
 	신지민 : 자연어 처리, 자료조사, 셀레니움을 활용한 데이터 수집
 
 ## ⚡사용기술
-### 	스킬 : Python, 자연어 처리, selenium
-
-## ⚡핵심기능
-### 	1. sel
-### 	2. 데이터 수집 및 자연어 처리를 통해 우산 필요성
-###  	3. GS25와 공유우산 결합
+### 프로그래밍 언어 : Python
+### 데이터 수집 및 크롤링 : Selenium, Beautiful Soup 
+### 데이터 처리 및 분석 : Pandas
+### 자연어 처리 : 형태소 분석, 텍스트 전처리, 키워드 추출, 긍부정 분석
+### API 활용 : 공공 데이터 API
    
-## ⚡핵심기능
+## ⚡참고 자료
 ### 	1.참고 사이트
 <https://www.notion.so/be6863e600af4dab8491a1a9cf98c165>
 ### 	2.발표자료
