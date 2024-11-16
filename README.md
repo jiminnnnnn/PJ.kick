@@ -32,11 +32,11 @@ Here are some ideas to get you started:
 	자연어 처리, 자료조사, 셀레니움을 활용한 데이터 수집
 
 ## ⚡사용기술
-### 프로그래밍 언어 : Python
-### 데이터 수집 및 크롤링 : Selenium, Beautiful Soup 
-### 데이터 처리 및 분석 : Pandas
-### 자연어 처리 : 형태소 분석, 텍스트 전처리, 키워드 추출, 긍부정 분석
-### API 활용 : 공공 데이터 API
+#### 프로그래밍 언어 : Python
+#### 데이터 수집 및 크롤링 : Selenium, Beautiful Soup 
+#### 데이터 처리 및 분석 : Pandas
+#### 자연어 처리 : 형태소 분석, 텍스트 전처리, 키워드 추출, 긍부정 분석
+#### API 활용 : 공공 데이터 API
    
 ## ⚡참고 자료
 ### 	1.참고 사이트
