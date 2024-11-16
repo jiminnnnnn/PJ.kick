@@ -37,7 +37,18 @@ Here are some ideas to get you started:
 #### 데이터 처리 및 분석 : Pandas
 #### 자연어 처리 : 형태소 분석, 텍스트 전처리, 키워드 추출, 긍부정 분석
 #### API 활용 : 공공 데이터 API
-   
+
+## ⚡핵심 작업
+1. API를 활용해 공공 데이터 수집
+![image](https://github.com/user-attachments/assets/48112c67-435a-4dd6-9b0c-9f6e5a0c9f53)
+2. selenium을 활용해 비정형 데이터 수집 및 정제
+![image](https://github.com/user-attachments/assets/a85a4af6-7a04-4c9a-8a39-611f4c6a7721)
+3. 'Semantic segmentation을 활용한 지형지물 인식 확인
+![image](https://github.com/user-attachments/assets/c87b378b-9bd0-4183-9e79-4c48c104bfe1)
+4. YOLOv8을 활용한 객체 인식 확인
+![image](https://github.com/user-attachments/assets/eec1c91e-6638-4a7a-bffe-f7cd58297fa7)
+
+
 ## ⚡참고 자료
 ### 	1.참고 사이트
 <https://www.notion.so/be6863e600af4dab8491a1a9cf98c165>
